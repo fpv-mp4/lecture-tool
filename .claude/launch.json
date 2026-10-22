@@ -1,0 +1,27 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lecture-ui",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "scripts/serve.py",
+        "8766",
+        "--no-browser"
+      ],
+      "port": 8766
+    },
+    {
+      "name": "lernreel-web",
+      "runtimeExecutable": "/opt/homebrew/bin/pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "@lernreel/web",
+        "dev",
+        "--port",
+        "3000"
+      ],
+      "port": 3000
+    }
+  ]
+}
