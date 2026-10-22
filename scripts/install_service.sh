@@ -40,7 +40,7 @@ esac
 mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs" 2>/dev/null || true
 if [ ! -w "$HOME/Library/LaunchAgents" ] || { [ -e "$PLIST" ] && [ ! -w "$PLIST" ]; }; then
   echo "cannot write to $HOME/Library/LaunchAgents (owned by: $(stat -f '%Su' "$HOME/Library/LaunchAgents" 2>/dev/null || echo '?'))."
-  echo "Fix it once with:   sudo chown -R \"$(id -un)\" \"$HOME/Library/LaunchAgents\"   (asks for your Mac password)"
+  echo "Fix it once with:   sudo chown -R \$USER ~/Library/LaunchAgents   (asks for your Mac password), then run the installer again"
   exit 1
 fi
 cat > "$PLIST" <<EOF

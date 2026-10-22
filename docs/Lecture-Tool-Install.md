@@ -18,13 +18,18 @@ The panel starts by itself every time you log in; from then on you just open tha
 Optional: for the better narration voice, paste an ElevenLabs API key under Settings → Narration.
 Without it the Mac voice is used.
 
-If the sign-in step shows an error instead of opening the browser, open a new Terminal window, run
+If something goes wrong, these two fixes cover it (paste them exactly; none of them contains quotes):
+
+- Sign-in error instead of a browser window: open a new Terminal window, run `claude auth login`,
+  sign in there, then paste the install line once more.
+- "Permission denied" for Library/LaunchAgents: run
 
 ```
-claude auth login
+sudo chown -R $USER ~/Library/LaunchAgents
 ```
 
-sign in there, and then paste the install line once more. If it says it cannot write to
-`~/Library/LaunchAgents`, run the `sudo chown` command it prints (your Mac password), then the install line again.
+  (asks for your Mac password, nothing is shown while typing), then paste the install line again.
+
+If the Terminal ever shows `dquote>` or `quote>`, press Control+C and paste the command again from this file.
 
 Updates: Settings → "Check for updates". When a new version is out, one click installs it.
