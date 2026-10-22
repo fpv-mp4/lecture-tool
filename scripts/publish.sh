@@ -31,6 +31,8 @@ if [ ! -d "$DIST/.git" ]; then
   fi
 fi
 
+git -C "$DIST" config http.postBuffer 524288000      # GitHub over HTTPS rejects larger pushes with the default buffer
+
 # ---- copy the tool (and nothing personal) ------------------------------------------------------------
 rsync -a --delete \
   --exclude '.git' --exclude 'jobs' --exclude '.env' --exclude '.env.*' --exclude '.venv' --exclude '__pycache__' \
