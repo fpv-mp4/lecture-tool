@@ -23,12 +23,15 @@ skill, installer) — never your lectures, your keys or the Python environment.
 with its own git repository, creates the GitHub repository `lecture-tool` under your account
 (needs `gh auth login`) and pushes. The repository is public: anyone with the link can install.
 
-**Your friend, once** (on a Mac with Homebrew; the repository is public, so no GitHub account is needed):
+**Your friend, once** — one line in Terminal (installs Homebrew and git if missing, fetches the tool into
+`~/lecture-tool`, runs the installer; no GitHub account needed):
 
 ```bash
-git clone https://github.com/fpv-mp4/lecture-tool.git ~/lecture-tool
-cd ~/lecture-tool && bash install.sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/fpv-mp4/lecture-tool/main/get.sh)"
 ```
+
+Or by hand: `git clone https://github.com/fpv-mp4/lecture-tool.git ~/lecture-tool && cd ~/lecture-tool && bash install.sh`
+(needs git, which comes with Homebrew or `xcode-select --install`). Send them `docs/Lecture-Tool-Install.md`.
 
 The installer sets up ffmpeg, Python, Claude Code (sign-in with *their* Claude subscription) and the
 panel as a login service at http://localhost:8765. An ElevenLabs key is optional (Settings → Narration).
