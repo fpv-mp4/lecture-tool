@@ -20,15 +20,13 @@ The tool is shared through a private GitHub repository that holds only the tool 
 skill, installer) — never your lectures, your keys or the Python environment.
 
 **You, once:** `bash scripts/publish.sh "first version"` creates `~/Documents/UNI/lecture-tool-dist`
-with its own git repository, creates the private GitHub repository `lecture-tool` under your account
-(needs `gh auth login`) and pushes. Invite your friend as a collaborator on GitHub (Settings →
-Collaborators), or make the repository public.
+with its own git repository, creates the GitHub repository `lecture-tool` under your account
+(needs `gh auth login`) and pushes. The repository is public: anyone with the link can install.
 
-**Your friend, once** (on a Mac with Homebrew):
+**Your friend, once** (on a Mac with Homebrew; the repository is public, so no GitHub account is needed):
 
 ```bash
-brew install gh && gh auth login
-gh repo clone <your-github-name>/lecture-tool ~/lecture-tool
+git clone https://github.com/fpv-mp4/lecture-tool.git ~/lecture-tool
 cd ~/lecture-tool && bash install.sh
 ```
 
