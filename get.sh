@@ -1,6 +1,6 @@
 #!/bin/bash
 # Lecture Tool - one-line install for macOS. Run with:
-#   curl -fsSL https://raw.githubusercontent.com/fpv-mp4/lecture-tool/main/get.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/fpv-mp4/lecture-tool/main/get.sh -o /tmp/lt-get.sh && bash /tmp/lt-get.sh
 # Installs Homebrew if missing (that also brings git), fetches the tool into ~/lecture-tool and runs its installer.
 set -euo pipefail
 REPO="https://github.com/fpv-mp4/lecture-tool.git"

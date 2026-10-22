@@ -27,7 +27,7 @@ with its own git repository, creates the GitHub repository `lecture-tool` under 
 `~/lecture-tool`, runs the installer; no GitHub account needed):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fpv-mp4/lecture-tool/main/get.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fpv-mp4/lecture-tool/main/get.sh -o /tmp/lt-get.sh && bash /tmp/lt-get.sh
 ```
 
 Or by hand: `git clone https://github.com/fpv-mp4/lecture-tool.git ~/lecture-tool && cd ~/lecture-tool && bash install.sh`

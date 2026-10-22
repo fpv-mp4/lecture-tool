@@ -75,11 +75,21 @@ if command -v claude >/dev/null || [ -x "$HOME/.local/bin/claude" ]; then ok "Cl
 fi
 export PATH="$HOME/.local/bin:$PATH"
 if command -v claude >/dev/null; then
+  if ! grep -qs 'HOME/.local/bin' "$HOME/.zshrc" 2>/dev/null; then
+    printf '\nexport PATH="$HOME/.local/bin:$PATH"\n' >> "$HOME/.zshrc"      # so `claude` works in new terminal windows
+  fi
   if claude auth status 2>/dev/null | grep -q '"loggedIn": true'; then ok "signed in to Claude"; else
     miss "not signed in to Claude"
     if [ "$CHECK" != "--check" ]; then
-      step "Sign in with your Claude subscription (a browser window opens)"
-      claude auth login
+      if [ -t 0 ] && [ -t 1 ]; then
+        step "Sign in with your Claude subscription (a browser window opens)"
+        claude auth login </dev/tty >/dev/tty 2>&1 || true
+      fi
+      if ! claude auth status 2>/dev/null | grep -q '"loggedIn": true'; then
+        echo
+        echo "   Sign in now: open a new Terminal window, run    claude auth login    and then run this installer again."
+        echo "   (The panel is installed anyway; it just cannot make lectures until you are signed in.)"
+      fi
     fi
   fi
 fi
