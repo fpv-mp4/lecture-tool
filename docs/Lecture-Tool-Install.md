@@ -3,10 +3,10 @@
 Turns a lecture PDF (script, slides, exercise sheet) into a compact lecture, a summary and a
 narrated video, on your own Mac, with your own Claude subscription (Pro or Max).
 
-Open **Terminal** (Spotlight → "Terminal") and paste this one line, then press Enter:
+Open **Terminal** (Spotlight → Terminal), paste this one line exactly as it is (no quotes in it, so chat apps cannot mangle it) and press Enter:
 
 ```
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/fpv-mp4/lecture-tool/main/get.sh)"
+curl -fsSL https://raw.githubusercontent.com/fpv-mp4/lecture-tool/main/get.sh | bash
 ```
 
 What happens: if Homebrew is not installed yet it is installed first (asks for your Mac password once;
