@@ -83,7 +83,7 @@ if command -v claude >/dev/null; then
     if [ "$CHECK" != "--check" ]; then
       if [ -t 0 ] && [ -t 1 ]; then
         step "Sign in with your Claude subscription (a browser window opens)"
-        claude auth login </dev/tty >/dev/tty 2>&1 || true
+        claude auth login || true
       fi
       if ! claude auth status 2>/dev/null | grep -q '"loggedIn": true'; then
         echo
@@ -100,8 +100,16 @@ if [ "$CHECK" = "--check" ]; then
   exit 0
 fi
 step "Starting the panel as a login service"
-PYTHON_BIN="$ROOT/.venv/bin/python" bash scripts/install_service.sh
-sleep 1
-open "http://localhost:8765" 2>/dev/null || true
-step "Done. The panel is at http://localhost:8765 — it starts by itself at every login."
+if PYTHON_BIN="$ROOT/.venv/bin/python" bash scripts/install_service.sh; then
+  sleep 1
+  open "http://localhost:8765" 2>/dev/null || true
+  step "Done. The panel is at http://localhost:8765 — it starts by itself at every login."
+else
+  miss "the login service could not be installed (see the message above)"
+  echo "   Starting the panel for now without the service…"
+  nohup "$ROOT/.venv/bin/python" "$ROOT/scripts/serve.py" --no-browser >"$HOME/Library/Logs/lecture-tool.log" 2>&1 &
+  sleep 2
+  open "http://localhost:8765" 2>/dev/null || true
+  step "The panel is at http://localhost:8765 for this session. Fix the service as shown above, then run the installer again so it starts at every login."
+fi
 echo "   Drop a PDF, press Create & run. Narration uses the macOS voice until you add an ElevenLabs key in Settings."

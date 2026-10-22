@@ -18,4 +18,13 @@ The panel starts by itself every time you log in; from then on you just open tha
 Optional: for the better narration voice, paste an ElevenLabs API key under Settings → Narration.
 Without it the Mac voice is used.
 
+If the sign-in step shows an error instead of opening the browser, open a new Terminal window, run
+
+```
+claude auth login
+```
+
+sign in there, and then paste the install line once more. If it says it cannot write to
+`~/Library/LaunchAgents`, run the `sudo chown` command it prints (your Mac password), then the install line again.
+
 Updates: Settings → "Check for updates". When a new version is out, one click installs it.

@@ -11,7 +11,7 @@ say() { printf "\n\033[1m%s\033[0m\n" "$1"; }
 
 if ! command -v brew >/dev/null 2>&1; then
   say "Installing Homebrew (asks for your Mac password once)..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" </dev/tty
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 # make brew available to this script and to future terminal windows (Homebrew's own "Next steps")
 for B in /opt/homebrew/bin/brew /usr/local/bin/brew; do
@@ -40,4 +40,4 @@ else
 fi
 
 say "Running the installer..."
-cd "$DEST" && bash install.sh </dev/tty
+cd "$DEST" && bash install.sh
