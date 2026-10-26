@@ -391,7 +391,7 @@
       <label class="drop" id="drop">
         <input type="file" id="pdf" accept=".pdf,.png,.jpg,.jpeg,.webp,.md,.txt,application/pdf,image/*,text/plain" multiple>
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0 4 4m-4-4-4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></div>
-        <b>Drop files here or click to upload</b><small>One or several: lecture script, slides, exercise sheet, photos of notes · PDF, images, text</small>
+        <b>Drop files here or click to upload</b><small>One or several: lecture script, slides, exercise sheet, photos of notes · PDF, images, text · or a finished lecture as .zip from a friend</small>
       </label>
       <div class="filelist" id="filelist"></div>
       <div class="saveline" id="saveline"><span id="saveText">Saved automatically under the course found in the file</span><button type="button" id="saveEdit">change</button></div>
@@ -576,8 +576,13 @@ function showComposer(){ parkVideo();
   let files=[];
   const OK=/\.(pdf|png|jpe?g|webp|gif|bmp|tiff?|md|txt|tex|csv)$/i;
   const kindOf=n=>/\.pdf$/i.test(n)?"pdf":/\.(md|txt|tex|csv)$/i.test(n)?"text":"image";
+  // a lecture .zip (made with the Zip button on another Mac) is imported as a finished lecture, not uploaded as a source
+  const importZip=f=>new Promise(res=>{ const hint=$("#hint"); hint.innerHTML=`Importing <b>${esc(f.name)}</b>…`;
+    const r=new FileReader(); r.onload=async()=>{ const out=await post("/api/import",{name:f.name,b64:r.result.split(",")[1]});
+      if(out.error){ hint.innerHTML=`<span class="err">${esc(out.error)}</span>`; res(false); return; }
+      hint.textContent="Imported."; await refreshJobs(); await openJob(out.dir); res(true); }; r.readAsDataURL(f); });
   const addFiles=list=>{ let rejected=[];
-    for(const f of list){ if(!OK.test(f.name)){rejected.push(f.name);continue;} if(!files.some(x=>x.name===f.name&&x.size===f.size)) files.push(f); }
+    for(const f of list){ if(/\.zip$/i.test(f.name)){ importZip(f); continue; } if(!OK.test(f.name)){rejected.push(f.name);continue;} if(!files.some(x=>x.name===f.name&&x.size===f.size)) files.push(f); }
     if(rejected.length) $("#hint").innerHTML=`<span class="err">Skipped ${esc(rejected.join(", "))}: use PDF, images or text files.</span>`;
     paintFiles(); };
   const paintFiles=()=>{

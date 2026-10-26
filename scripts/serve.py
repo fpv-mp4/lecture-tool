@@ -217,6 +217,46 @@ def guess_title(pdf_bytes: bytes) -> str:
     return " — ".join(nice(t) for _, t in picks)
 
 
+def import_zip(name: str, b64: str):
+    """Unpack a lecture zip (as made by the Zip button: <course>/<chapter>/…) into jobs/. Refuses
+    anything that would land outside jobs/ and does not overwrite an existing lecture."""
+    import base64
+    import io
+    import zipfile
+    data = base64.b64decode(b64 or "")
+    if not data:
+        raise ValueError("empty file")
+    try:
+        z = zipfile.ZipFile(io.BytesIO(data))
+    except zipfile.BadZipFile:
+        raise ValueError(f"{name} is not a zip file") from None
+    names = [n for n in z.namelist() if not n.endswith("/")]
+    jobs = sorted({"/".join(n.split("/")[:2]) for n in names if n.count("/") >= 2 and n.split("/")[2] == "job.json"})
+    if not jobs:
+        raise ValueError("no lecture in this zip (expected <course>/<name>/job.json)")
+    done = []
+    for rel in jobs:
+        course, chapter = rel.split("/")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", course) or not re.fullmatch(r"[a-z0-9][a-z0-9-]*", chapter):
+            raise ValueError(f"unexpected folder name in zip: {rel}")
+        d = JOBS / course / chapter
+        if d.exists():
+            raise ValueError(f"{rel} already exists here — delete it first or rename the folder in the zip")
+        for n in names:
+            if not n.startswith(rel + "/"):
+                continue
+            target = (d / n[len(rel) + 1:])
+            if ".." in Path(n).parts or not str(target.resolve()).startswith(str(d.resolve())):
+                raise ValueError("zip contains an unsafe path")
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with z.open(n) as src, open(target, "wb") as dst:
+                shutil.copyfileobj(src, dst)
+        for stale in ("run.pid", "run.jsonl"):
+            (d / stale).unlink(missing_ok=True)
+        done.append(rel)
+    return {"imported": done, "dir": done[0]}
+
+
 # ---- version and updates -------------------------------------------------------
 def _git(*args, timeout=30):
     import subprocess
@@ -626,15 +666,31 @@ class Handler(SimpleHTTPRequestHandler):
         import zipfile
         skip_dirs = {"render", "pages", "__pycache__"}
         skip_files = {"run.jsonl", "run.pid"}
+        # page images that the text embeds or the video's figure scenes use travel along (not all 400)
+        wanted = set()
+        for name in ("lecture.md", "summary.md"):
+            try:
+                wanted |= set(re.findall(r"pages/(page-\d+\.png)", (d / name).read_text(encoding="utf-8")))
+            except OSError:
+                pass
+        try:
+            for sc in json.loads((d / "scenes.json").read_text(encoding="utf-8")).get("scenes", []):
+                if sc.get("type") == "figure" and isinstance(sc.get("page"), int):
+                    wanted.add(f"page-{sc['page']:03d}.png")
+        except (OSError, ValueError):
+            pass
         tmp = tempfile.NamedTemporaryFile(prefix="lecture-", suffix=".zip", delete=False)
         tmp.close()
         try:
             with zipfile.ZipFile(tmp.name, "w") as z:
                 for f in sorted(d.rglob("*")):
-                    if not f.is_file() or f.name in skip_files or any(p in skip_dirs for p in f.relative_to(d).parts):
+                    parts = f.relative_to(d).parts
+                    if not f.is_file() or f.name in skip_files:
+                        continue
+                    if any(p in skip_dirs for p in parts) and not (parts[0] == "pages" and f.name in wanted):
                         continue
                     comp = zipfile.ZIP_STORED if f.suffix in (".mp4", ".pdf", ".png", ".m4a", ".mp3") else zipfile.ZIP_DEFLATED
-                    z.write(f, arcname=str(Path(rel.replace("/", "-")) / f.relative_to(d)), compress_type=comp)
+                    z.write(f, arcname=str(Path(rel) / f.relative_to(d)), compress_type=comp)
             size = os.path.getsize(tmp.name)
             self.send_response(200)
             self.send_header("Content-Type", "application/zip")
@@ -727,6 +783,12 @@ class Handler(SimpleHTTPRequestHandler):
         u = urlparse(self.path)
         if not self.same_origin():
             return self.send_json({"error": "cross-site request refused"}, 403)
+        if u.path == "/api/import":
+            try:
+                b = self.body_json()
+                return self.send_json(import_zip(b.get("name") or "lecture.zip", b.get("b64") or ""), 201)
+            except (ValueError, OSError, KeyError) as e:
+                return self.send_json({"error": str(e)}, 400)
         if u.path == "/api/update":
             try:
                 return self.send_json(apply_update())

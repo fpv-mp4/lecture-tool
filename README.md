@@ -36,6 +36,10 @@ Or by hand: `git clone https://github.com/fpv-mp4/lecture-tool.git ~/lecture-too
 The installer sets up ffmpeg, Python, Claude Code (sign-in with *their* Claude subscription) and the
 panel as a login service at http://localhost:8765. An ElevenLabs key is optional (Settings → Narration).
 
+**Sharing a finished lecture:** open it, press **Zip** in the top bar (text, summary, video, sources and the
+figure pages — not the render scratch), send the file (AirDrop, Drive, WhatsApp), and the other person drops
+the .zip onto their panel's upload area: it is imported as a finished lecture with everything in place.
+
 **Every update:** you run `bash scripts/publish.sh "what changed"` (or press *Publish update* in the
 panel's Settings). Their panel shows *Update to x.y.z* in Settings → one click pulls the new version,
 refreshes the Python packages and restarts the service.
