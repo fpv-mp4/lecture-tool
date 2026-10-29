@@ -1,0 +1,38 @@
+# Lecture Tool on Fly.io — contract in docs/HOSTED.md §8, owner's steps in docs/HOSTED-SETUP.md.
+# Deploy with `bash scripts/deploy.sh [app-name]`; the script passes `-a <name>` so the app name
+# below is only the default.
+
+app = "lecture-tool"
+primary_region = "fra"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  LT_HOSTED = "1"
+  LT_DATA = "/data"
+  PORT = "8765"
+  LT_MAX_PARALLEL_RUNS = "3"     # 2–3 people: up to three lectures at the same time
+  # Secrets (never here): LT_SECRET, LT_ADMIN_EMAIL, ANTHROPIC_API_KEY, ELEVENLABS_API_KEY → fly secrets set
+
+[mounts]
+  source = "data"          # created by deploy.sh: 30 GB in fra, Fly's daily snapshots
+  destination = "/data"
+
+[http_service]
+  internal_port = 8765
+  force_https = true
+  auto_stop_machines = "off"     # never stop the machine: runs take an hour and must not be cut
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/api/me"             # answers 200 for anyone ({hosted: true, signed_in: false})
+
+[[vm]]
+  size = "performance-2x"        # 2 dedicated vCPUs: fast ffmpeg encodes for 2–3 people at once
+  memory = "6gb"                 # ≈ 1.5–2 GB per running lecture (claude -p + Pillow frames + ffmpeg)
