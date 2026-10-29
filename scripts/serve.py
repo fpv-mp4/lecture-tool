@@ -34,7 +34,7 @@ import webbrowser
 from datetime import datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import unquote, parse_qs, urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
 JOBS = ROOT / "jobs"
@@ -217,17 +217,14 @@ def guess_title(pdf_bytes: bytes) -> str:
     return " — ".join(nice(t) for _, t in picks)
 
 
-def import_zip(name: str, b64: str):
+def import_zip(name: str, path: Path):
     """Unpack a lecture zip (as made by the Zip button: <course>/<chapter>/…) into jobs/. Refuses
     anything that would land outside jobs/ and does not overwrite an existing lecture."""
-    import base64
-    import io
     import zipfile
-    data = base64.b64decode(b64 or "")
-    if not data:
+    if not path.exists() or path.stat().st_size == 0:
         raise ValueError("empty file")
     try:
-        z = zipfile.ZipFile(io.BytesIO(data))
+        z = zipfile.ZipFile(path)
     except zipfile.BadZipFile:
         raise ValueError(f"{name} is not a zip file") from None
     names = [n for n in z.namelist() if not n.endswith("/")]
@@ -784,11 +781,29 @@ class Handler(SimpleHTTPRequestHandler):
         if not self.same_origin():
             return self.send_json({"error": "cross-site request refused"}, 403)
         if u.path == "/api/import":
+            import tempfile
+            n = int(self.headers.get("Content-Length") or 0)
+            if n <= 0:
+                return self.send_json({"error": "empty upload"}, 400)
+            name = unquote(self.headers.get("X-File-Name") or "lecture.zip")
+            tmp = tempfile.NamedTemporaryFile(prefix="import-", suffix=".zip", delete=False)
             try:
-                b = self.body_json()
-                return self.send_json(import_zip(b.get("name") or "lecture.zip", b.get("b64") or ""), 201)
+                remaining = n
+                while remaining > 0:                      # stream to disk: never hold the whole zip in memory
+                    chunk = self.rfile.read(min(1 << 20, remaining))
+                    if not chunk:
+                        break
+                    tmp.write(chunk)
+                    remaining -= len(chunk)
+                tmp.close()
+                if remaining > 0:
+                    return self.send_json({"error": "upload stopped early — try again"}, 400)
+                return self.send_json(import_zip(name, Path(tmp.name)), 201)
             except (ValueError, OSError, KeyError) as e:
                 return self.send_json({"error": str(e)}, 400)
+            finally:
+                tmp.close()
+                os.unlink(tmp.name)
         if u.path == "/api/update":
             try:
                 return self.send_json(apply_update())

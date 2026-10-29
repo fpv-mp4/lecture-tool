@@ -389,7 +389,7 @@
     <div class="hero"><h1>What should I turn into a lecture?</h1><p>Drop a lecture script or slide deck. Choose how compact the result should be.</p></div>
     <form class="card" id="form">
       <label class="drop" id="drop">
-        <input type="file" id="pdf" accept=".pdf,.png,.jpg,.jpeg,.webp,.md,.txt,application/pdf,image/*,text/plain" multiple>
+        <input type="file" id="pdf" accept=".pdf,.png,.jpg,.jpeg,.webp,.md,.txt,.zip,application/pdf,image/*,text/plain,application/zip" multiple>
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0 4 4m-4-4-4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></div>
         <b>Drop files here or click to upload</b><small>One or several: lecture script, slides, exercise sheet, photos of notes · PDF, images, text · or a finished lecture as .zip from a friend</small>
       </label>
@@ -577,10 +577,15 @@ function showComposer(){ parkVideo();
   const OK=/\.(pdf|png|jpe?g|webp|gif|bmp|tiff?|md|txt|tex|csv)$/i;
   const kindOf=n=>/\.pdf$/i.test(n)?"pdf":/\.(md|txt|tex|csv)$/i.test(n)?"text":"image";
   // a lecture .zip (made with the Zip button on another Mac) is imported as a finished lecture, not uploaded as a source
-  const importZip=f=>new Promise(res=>{ const hint=$("#hint"); hint.innerHTML=`Importing <b>${esc(f.name)}</b>…`;
-    const r=new FileReader(); r.onload=async()=>{ const out=await post("/api/import",{name:f.name,b64:r.result.split(",")[1]});
+  const importZip=f=>new Promise(res=>{ const hint=$("#hint"), go=$("#go"); go.disabled=true;
+    hint.innerHTML=`<span class="upbar"><i style="width:0%"></i></span>Importing <b>${esc(f.name)}</b> 0%`;
+    const x=new XMLHttpRequest(); x.open("POST","/api/import"); x.setRequestHeader("content-type","application/zip"); x.setRequestHeader("X-File-Name",encodeURIComponent(f.name));
+    x.upload.onprogress=ev=>{ if(ev.lengthComputable){ const p=Math.round(ev.loaded/ev.total*100); hint.innerHTML=`<span class="upbar"><i style="width:${p}%"></i></span>${p<100?`Importing <b>${esc(f.name)}</b> ${p}%`:"Unpacking…"}`; } };
+    x.onload=async()=>{ go.disabled=false; let out={}; try{ out=JSON.parse(x.responseText); }catch(e){ out={error:`the server answered ${x.status}`}; }
       if(out.error){ hint.innerHTML=`<span class="err">${esc(out.error)}</span>`; res(false); return; }
-      hint.textContent="Imported."; await refreshJobs(); await openJob(out.dir); res(true); }; r.readAsDataURL(f); });
+      hint.textContent="Imported."; await refreshJobs(); await openJob(out.dir); res(true); };
+    x.onerror=()=>{ go.disabled=false; hint.innerHTML='<span class="err">Import failed — is the panel\'s server running?</span>'; res(false); };
+    x.send(f); });
   const addFiles=list=>{ let rejected=[];
     for(const f of list){ if(/\.zip$/i.test(f.name)){ importZip(f); continue; } if(!OK.test(f.name)){rejected.push(f.name);continue;} if(!files.some(x=>x.name===f.name&&x.size===f.size)) files.push(f); }
     if(rejected.length) $("#hint").innerHTML=`<span class="err">Skipped ${esc(rejected.join(", "))}: use PDF, images or text files.</span>`;
