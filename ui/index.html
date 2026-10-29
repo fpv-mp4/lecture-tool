@@ -102,35 +102,6 @@
   .dnote{font-size:12.5px;color:var(--muted);margin-bottom:10px;line-height:1.5}
   .drow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .drow .field{min-width:150px} .drow .field select{width:100%;background:none;border:0;color:var(--text);font-size:13px;outline:0} .drow .field option{background:var(--bg-2)}
-  .dialog h4{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0 0 6px;font-weight:400}
-  /* hosted mode only: sign-in card, account lines in the sidebar, people table */
-  .modal.auth{background:var(--bg);z-index:60}
-  .authcard{width:min(400px,100%);box-shadow:0 20px 60px rgba(17,17,20,.10)}
-  .authcard .dhead{flex-direction:column;align-items:flex-start;gap:6px}
-  .authcard .dhead h2{font-size:20px}
-  .authfields{display:grid;gap:8px;margin-bottom:12px}
-  .autherr{color:var(--err);font-size:13px;margin:-4px 0 10px;line-height:1.45}
-  .authactions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  .linkbtn{color:var(--muted);font-size:13px;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;white-space:nowrap} .linkbtn:hover{color:var(--text);text-decoration-color:var(--accent)}
-  .sb-me{padding:10px 12px 6px;border-top:1px solid var(--line-2);font-size:12.5px;color:var(--muted)}
-  .sb-me .who{display:flex;align-items:center;justify-content:space-between;gap:8px}
-  .sb-me .who b{color:var(--text);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-  .sb-me .usage{margin-top:3px} .sb-me .usage.over{color:var(--err)}
-  .sb-me:not([hidden])+.sb-foot{border-top:0;padding-top:0}
-  .tnote{font-size:12px;color:var(--muted)}
-  .chip:disabled{opacity:.5;cursor:not-allowed}
-  .invites{display:flex;flex-direction:column}
-  .inv{display:flex;align-items:center;gap:8px;font-size:13px;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid var(--line-3)}
-  .inv .code{font-family:var(--mono);font-size:12px;background:var(--bg-3);padding:1px 6px;border-radius:5px} .inv .note{color:var(--muted);flex:1;min-width:0}
-  .inv .linkout{flex-basis:100%;font:inherit;font-family:var(--mono);font-size:11.5px;padding:4px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--bg-inset);color:var(--text)}
-  .tscroll{overflow:auto}
-  .people{width:100%;border-collapse:collapse;font-size:13px}
-  .people th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line-2);font-weight:400;white-space:nowrap}
-  .people td{padding:6px 8px;border-bottom:1px solid var(--line-3);vertical-align:middle;white-space:nowrap}
-  .people td.em{color:var(--muted);font-size:12px}
-  .people input[type=number]{width:72px;font:inherit;font-size:13px;padding:3px 6px;border:1px solid var(--line-2);border-radius:6px;background:var(--bg-2);color:var(--text)}
-  .people input[type=number]:focus{border-color:var(--acc-line);outline:0}
-  .people input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px}
 
   /* ---------- main ---------- */
   main{display:flex;flex-direction:column;min-height:0;min-width:0;position:relative}
@@ -346,10 +317,6 @@
   <button class="newbtn" id="newBtn"><span class="plus">+</span>New lecture</button>
   <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="Search lectures" autocomplete="off"></div>
   <div class="history" id="history"></div>
-  <div class="sb-me" id="sbMe" hidden>
-    <div class="who"><b id="meName"></b><button class="linkbtn" id="signOut">Sign out</button></div>
-    <div class="usage" id="meUsage"></div>
-  </div>
   <div class="sb-foot">
     <button class="sbset" id="openSettings"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
     <span class="cnt" id="count"></span>
@@ -359,9 +326,9 @@
 <div class="modal" id="settingsModal" hidden>
   <div class="dialog">
     <div class="dhead"><h2>Settings</h2><button class="icon-btn" id="closeSettings" title="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <section id="secNarration">
+    <section>
       <h3>Narration</h3>
-      <p class="dnote">ElevenLabs reads the videos. <span id="narrWhere">The key is stored only on this Mac (<span style="font-family:var(--mono)">.env</span>). Without it, the macOS voice is used.</span></p>
+      <p class="dnote">ElevenLabs reads the videos. The key is stored only on this Mac (<span style="font-family:var(--mono)">.env</span>). Without it, the macOS voice is used.</p>
       <div class="drow">
         <div class="field" style="flex:1;min-width:220px"><label>API key <span id="keyState" style="color:var(--faint)"></span></label><input id="elKey" type="password" placeholder="paste key to set or replace" autocomplete="off"></div>
         <div class="field" style="flex:1;min-width:220px"><label>Voice</label><select id="elVoice"><option value="">loading…</option></select></div>
@@ -386,22 +353,7 @@
         <button class="ghost" id="notifyBtn">Notify me when a lecture is ready</button><span id="notifyState" style="font-size:12px;color:var(--faint)"></span>
       </div>
     </section>
-    <section id="secAccount" hidden>
-      <h3>Your account</h3>
-      <p class="dnote" id="accLine"></p>
-      <div class="drow"><button class="ghost" id="pwToggle">Change password</button></div>
-      <form class="drow" id="pwForm" hidden style="margin-top:8px" novalidate>
-        <div class="field" style="flex:1;min-width:180px"><label>Current password</label><input id="pwOld" type="password" autocomplete="current-password"></div>
-        <div class="field" style="flex:1;min-width:180px"><label>New password</label><input id="pwNew" type="password" autocomplete="new-password"></div>
-        <button class="ghost" type="submit">Save</button><span id="pwMsg" style="font-size:12px;color:var(--faint)"></span>
-      </form>
-    </section>
-    <section id="secPeople" hidden>
-      <h3>People</h3>
-      <p class="dnote">Who can use this Lecture Tool, what each person has used this month and how much they may spend.</p>
-      <div id="peopleBox"></div>
-    </section>
-    <section id="secUpdates">
+    <section>
       <h3>Version and updates</h3>
       <div class="drow" style="align-items:center;flex-wrap:wrap">
         <span id="verLine" style="font-size:13px;color:var(--muted)">…</span>
@@ -413,26 +365,9 @@
     </section>
     <section>
       <h3>About</h3>
-      <p class="dnote" id="aboutNote">Lecture Tool runs on this Mac and uses your Claude subscription through Claude Code. Lectures live in <span style="font-family:var(--mono)">jobs/</span> inside the tool's folder; the service log is <span style="font-family:var(--mono)">~/Library/Logs/lecture-tool.log</span>.</p>
+      <p class="dnote">Lecture Tool runs on this Mac and uses your Claude subscription through Claude Code. Lectures live in <span style="font-family:var(--mono)">jobs/</span> inside the tool's folder; the service log is <span style="font-family:var(--mono)">~/Library/Logs/lecture-tool.log</span>.</p>
     </section>
   </div>
-</div>
-
-<div class="modal auth" id="authModal" hidden>
-  <form class="dialog authcard" id="authForm" novalidate>
-    <div class="dhead"><div class="logo"><i></i>LECTURE<small>TOOL</small></div><h2 id="authTitle">Sign in</h2></div>
-    <section>
-      <p class="dnote" id="authNote">Sign in to get to your lectures.</p>
-      <div class="authfields">
-        <div class="field" id="afName" hidden><label>Name</label><input id="aName" autocomplete="name" placeholder="how you want to be called"></div>
-        <div class="field"><label>E-mail</label><input id="aEmail" type="email" autocomplete="email" inputmode="email" spellcheck="false"></div>
-        <div class="field"><label>Password</label><input id="aPw" type="password" autocomplete="current-password"></div>
-        <div class="field" id="afInvite" hidden><label>Invite code</label><input id="aInvite" autocomplete="off" spellcheck="false" placeholder="from the person who invited you"></div>
-      </div>
-      <div class="autherr" id="authErr" hidden></div>
-      <div class="authactions"><button class="cta" type="submit" id="authGo">Sign in</button><button class="linkbtn" type="button" id="authSwitch">Create an account</button></div>
-    </section>
-  </form>
 </div>
 
 <main>
@@ -523,12 +458,8 @@ const TABS=[
 let showDetails=false; try{ showDetails=localStorage.getItem("lt.details")==="1"; }catch(e){}
 const $=(s,r=document)=>r.querySelector(s);
 let offline=false;
-// hosted mode (GET /api/me says hosted:true): sign-in, usage, people; everything stays as is in local mode
-let hosted=false, me=null, narrationOK=true, authGate=false, started=false, runNote=null;
-const api=(p,o)=>fetch(p,o).then(r=>{
-    if(r.status===401&&!/^\/api\/auth\/sign(in|up)$/.test(p)){ showAuth(); const e=new Error("sign in"); e.signin=true; throw e; }   // session gone: back to the sign-in card
-    if(!r.ok&&r.headers.get("content-type")?.includes("json")) return r.json(); if(!r.ok) throw new Error(r.status+" "+r.statusText); return r.json(); })
-  .then(j=>{ if(offline){offline=false; paintOffline();} return j; }, e=>{ if(e.signin) throw e; if(!offline){offline=true; paintOffline();} throw e; });
+const api=(p,o)=>fetch(p,o).then(r=>{ if(!r.ok&&r.headers.get("content-type")?.includes("json")) return r.json(); if(!r.ok) throw new Error(r.status+" "+r.statusText); return r.json(); })
+  .then(j=>{ if(offline){offline=false; paintOffline();} return j; }, e=>{ if(!offline){offline=true; paintOffline();} throw e; });
 function paintOffline(){ const c=$("#count"); if(!c) return; c.textContent=offline?"server not reachable":c.textContent; c.style.color=offline?"var(--err)":""; }
 const post=(p,b)=>api(p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -549,7 +480,7 @@ async function refreshJobs(){
   jobs=await api("/api/jobs");
   // finish notifications: a job that was running and is now done or failed
   jobs.forEach(j=>{ const was=prevStage[j.dir]; const now=j.running?"running":j.stage;
-    if(was==="running"&&(now==="done"||now==="error")){ notifyDone(j); if(hosted) refreshMe(); } prevStage[j.dir]=now; });
+    if(was==="running"&&(now==="done"||now==="error")) notifyDone(j); prevStage[j.dir]=now; });
   const nRun=jobs.filter(j=>j.running).length;
   $("#count").textContent=nRun?`${nRun} running`:`${jobs.length}`;
   const el=$("#history"); const q=filter.toLowerCase();
@@ -570,7 +501,7 @@ async function refreshJobs(){
 }
 async function deleteJob(d){
   if(!confirm(`Delete ${d} and all its files?`)) return;
-  await fetch(`/api/jobs?dir=${encodeURIComponent(d)}`,{method:"DELETE"}).then(r=>{ if(r.status===401) showAuth(); }); if(current===d) showComposer(); refreshJobs();
+  await fetch(`/api/jobs?dir=${encodeURIComponent(d)}`,{method:"DELETE"}); if(current===d) showComposer(); refreshJobs();
 }
 $("#q").oninput=e=>{filter=e.target.value;refreshJobs();};
 $("#newBtn").onclick=()=>showComposer();
@@ -613,8 +544,7 @@ function openSettingsDialog(){
   $("#dRatio").innerHTML=RATIOS.map(r=>`<option value="${r[0]}">${r[1]} — ${r[2]}</option>`).join("");
   const d=getDefaults(); $("#dModel").value=d.model; $("#dLang").value=d.lang; $("#dRatio").value=d.ratio; $("#dVideo").value=d.video; $("#dScope").value=d.scope; $("#dLook").value=d.theme||"mix";
   ["dModel","dLang","dRatio","dVideo","dScope","dLook"].forEach(id=>$("#"+id).onchange=()=>{ const v={model:$("#dModel").value,lang:$("#dLang").value,ratio:$("#dRatio").value,video:$("#dVideo").value,scope:$("#dScope").value,theme:$("#dLook").value}; try{localStorage.setItem(DEFAULTS_KEY,JSON.stringify(v));}catch(e){} });
-  if(!hosted||isAdmin()) loadNarration(); if(!hosted) loadVersion(false);
-  if(hosted){ refreshMe().then(paintAccount); $("#pwForm").hidden=true; $("#pwMsg").textContent=""; if(isAdmin()) loadPeople(); }
+  loadNarration(); loadVersion(false);
   const paintNotify=()=>{ let on=false; try{on=localStorage.getItem("lt.notify")==="1";}catch(e){}
     const perm=("Notification" in window)?Notification.permission:"unsupported";
     $("#notifyState").innerHTML=perm==="unsupported"?"not supported in this browser":perm==="denied"?"blocked for this site — to allow: click the icon left of the address bar (in the app window: ⋮ → App info) → Site settings → Notifications → Allow, check System Settings → Notifications → Google Chrome, then reload and press the button again":on&&perm==="granted"?"on":"off";
@@ -636,9 +566,6 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("#settingsModal
 function showComposer(){ parkVideo();
   current=null; settingsOpen=false; $("#tbTitle").textContent="New lecture"; $("#tbCrumb").textContent=""; $("#tbPill").hidden=true; $("#tbSettings").hidden=true; $("#tbDelete").hidden=true; $("#tbZip").hidden=true;
   const st=$("#stage"); st.innerHTML=""; st.dataset.dir=""; st.appendChild($("#tplComposer").content.cloneNode(true));
-  if(hosted){ [...$("#tts").options].forEach(o=>{ if(o.value!=="elevenlabs") o.remove(); });   // no macOS voice on the server
-    $("#hint").textContent="The slider sets both the text and the video, from a short cheat sheet to a full lesson with every exercise worked.";
-    if(!narrationOK){ const v=$("#video"); v.disabled=true; v.title="Narration is not set up yet — ask the admin"; v.insertAdjacentHTML("afterend",'<span class="tnote">Narration is not set up yet — ask the admin</span>'); } }
   refreshJobs().then(()=>{ $("#courses").innerHTML=[...new Set(jobs.map(j=>j.course))].map(c=>`<option value="${esc(c)}">`).join("");
     if(!jobs.length){ $(".hero").insertAdjacentHTML("afterend",`<div class="onboard"><div><b>1.</b> Drop a lecture script, slides, an exercise sheet or photos of your notes.</div><div><b>2.</b> Choose how compact it should be and whether you want a narrated video.</div><div><b>3.</b> Press Make lecture. Text takes a few minutes, video about twenty; everything is checked against the source so nothing is silently lost.</div></div>`); } });
   const saveText=()=>{ const c=$("#course").value.trim(), n=$("#chapter").value.trim();
@@ -654,7 +581,7 @@ function showComposer(){ parkVideo();
     hint.innerHTML=`<span class="upbar"><i style="width:0%"></i></span>Importing <b>${esc(f.name)}</b> 0%`;
     const x=new XMLHttpRequest(); x.open("POST","/api/import"); x.setRequestHeader("content-type","application/zip"); x.setRequestHeader("X-File-Name",encodeURIComponent(f.name));
     x.upload.onprogress=ev=>{ if(ev.lengthComputable){ const p=Math.round(ev.loaded/ev.total*100); hint.innerHTML=`<span class="upbar"><i style="width:${p}%"></i></span>${p<100?`Importing <b>${esc(f.name)}</b> ${p}%`:"Unpacking…"}`; } };
-    x.onload=async()=>{ go.disabled=false; let out={}; if(x.status===401){ showAuth(); out={error:"Please sign in again."}; } else { try{ out=JSON.parse(x.responseText); }catch(e){ out={error:`the server answered ${x.status}`}; } }
+    x.onload=async()=>{ go.disabled=false; let out={}; try{ out=JSON.parse(x.responseText); }catch(e){ out={error:`the server answered ${x.status}`}; }
       if(out.error){ hint.innerHTML=`<span class="err">${esc(out.error)}</span>`; res(false); return; }
       hint.textContent="Imported."; await refreshJobs(); await openJob(out.dir); res(true); };
     x.onerror=()=>{ go.disabled=false; hint.innerHTML='<span class="err">Import failed — is the panel\'s server running?</span>'; res(false); };
@@ -685,7 +612,7 @@ function showComposer(){ parkVideo();
   const paintParams=()=>{ const r=RATIOS[+ratio.value]||RATIOS[1]; const on=$("#video").classList.contains("on");
     $("#pVideo").textContent=on?r[4][0]:"off"; $("#pVideo").className=on?"":"off"; $("#pReady").textContent=on?r[4][1]:"≈ 15 min"; };
   let video=false; $("#video").onclick=()=>{video=!video;$("#video").classList.toggle("on",video);$("#video b").textContent=video?"on":"off";$("#ttsChip").style.display=video?"":"none";$("#themeChip").style.display=video?"":"none";paintLook(video?$("#theme").value:"mix",$("#go")); paintParams();};
-  if(dft.video==="1"&&!$("#video").disabled) $("#video").onclick();
+  if(dft.video==="1") $("#video").onclick();
   $("#theme").value=dft.theme||"mix"; if($("#theme").selectedIndex<0) $("#theme").value="mix"; const tl=()=>{$("#themeLbl").textContent=($("#theme").selectedOptions[0]||{textContent:"Mix"}).textContent.split(" — ")[0]; paintLook(video?$("#theme").value:"mix",$("#go"));}; tl(); $("#theme").onchange=tl;
   ticks.innerHTML=RATIOS.map((r,i)=>`<span data-i="${i}">${r[1]}</span>`).join("");
   ticks.querySelectorAll("span").forEach(s=>s.onclick=()=>{ratio.value=s.dataset.i;paint();});
@@ -704,15 +631,15 @@ function showComposer(){ parkVideo();
     const label=go.innerHTML;
     const r=await new Promise(res=>{ const x=new XMLHttpRequest(); x.open("POST","/api/jobs"); x.setRequestHeader("content-type","application/json");
       x.upload.onprogress=ev=>{ if(ev.lengthComputable){ const p=Math.round(ev.loaded/ev.total*100); hint.innerHTML=`<span class="upbar"><i style="width:${p}%"></i></span>Uploading ${p}%`; go.textContent=p<100?`Uploading ${p}%`:"Processing…"; } };
-      x.onload=()=>{ if(x.status===401){ showAuth(); res({error:"Please sign in again."}); return; } try{ res(JSON.parse(x.responseText)); }catch(e){ res({error:`the server answered ${x.status}`}); } };
+      x.onload=()=>{ try{ res(JSON.parse(x.responseText)); }catch(e){ res({error:`the server answered ${x.status}`}); } };
       x.onerror=()=>res({error:"upload failed — is the panel's server running?"});
       x.send(JSON.stringify(body)); });
     go.disabled=false; go.innerHTML=label;
     if(r.error){hint.innerHTML=`<span class="err">${esc(r.error)}</span>`;return;}
     hint.textContent="Starting…";
-    const run=await post("/api/run",{dir:r.dir,from:"all"}).catch(e=>({error:e.signin?"":"The server did not answer — open the lecture and press Make lecture."}));
-    if(run.error) runNote={dir:r.dir,text:run.error};   // e.g. budget used up or the machine is busy: shown in the status line until a run starts
+    const run=await post("/api/run",{dir:r.dir,from:"all"});
     await openJob(r.dir);
+    if(run.error) $("#statusline").insertAdjacentHTML("beforeend",`<span style="color:var(--err)">${esc(run.error)}</span>`);
   };
 }
 
@@ -734,9 +661,9 @@ function cmdHtml(dir){ const c=`/lecture jobs/${dir}`; return `<span class="cmd"
 document.addEventListener("click",e=>{ const b=e.target.closest(".copycmd"); if(!b) return; navigator.clipboard.writeText(b.dataset.cmd); b.textContent="copied"; setTimeout(()=>b.textContent="copy",1200); });
 
 async function startRun(dir,from){
-  const r=await post("/api/run",{dir,from}).catch(e=>({error:e.signin?"":"The server did not answer. Try again in a moment."}));
-  if(r.error){ if(!hosted){ alert(r.error); return; } runNote={dir,text:r.error}; lastLoaded=""; renderJob(); return; }
-  runNote=null; lastLoaded=""; renderJob();
+  const r=await post("/api/run",{dir,from});
+  if(r.error){ alert(r.error); return; }
+  lastLoaded=""; renderJob();
 }
 
 // KaTeX accepts one \tag per display formula; a block with several (eq. 2.29 ⇒ eq. 2.30) is split into one block per tag
@@ -813,11 +740,9 @@ async function renderJob(){
         <button class="cta sm" id="runBtn"><svg class="i" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg>Go</button>`;
       $("#runBtn").onclick=()=>startRun(j.dir,$("#fromSel").value); } }
   const when=j.status.updated?new Date(j.status.updated).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):"";
-  let exitNote=""; if(!running&&j.run&&j.run.exit!=null&&j.run.exit!==0) exitNote=`<span style="color:var(--err)">claude exited with ${j.run.exit}${/authenticate/i.test(j.log||"")?(hosted?" · ask the admin":" · run <b>claude auth login</b> in a terminal"):""}</span>`;
-  if(running&&runNote&&runNote.dir===j.dir) runNote=null;
-  const refused=runNote&&runNote.dir===j.dir?`<span style="color:var(--err)">${esc(runNote.text)}</span> `:"";
+  let exitNote=""; if(!running&&j.run&&j.run.exit!=null&&j.run.exit!==0) exitNote=`<span style="color:var(--err)">claude exited with ${j.run.exit}${/authenticate/i.test(j.log||"")?" · run <b>claude auth login</b> in a terminal":""}</span>`;
   const friendly=(j.status.message||"").replace(/^lecture\.mp4 ready — /,"video ").replace(/^lecture\.md ready — /,"text ").replace(/^lecture\.md \+ summary\.md ready — /,"text ");
-  $("#statusline").innerHTML=`<span class="k ${st}">${STAGE_LABEL[st]||st}</span> · ${esc(friendly)} <span style="color:var(--faint)">${when}</span> ${refused}${exitNote}${j.job.notes?`<span title="${esc(j.job.notes)}" style="color:var(--faint)">· notes: ${esc(j.job.notes.length>60?j.job.notes.slice(0,60)+"…":j.job.notes)}</span>`:""}<span class="right">${st==="created"&&!running&&!hosted?cmdHtml(j.dir):""}</span>`;
+  $("#statusline").innerHTML=`<span class="k ${st}">${STAGE_LABEL[st]||st}</span> · ${esc(friendly)} <span style="color:var(--faint)">${when}</span> ${exitNote}${j.job.notes?`<span title="${esc(j.job.notes)}" style="color:var(--faint)">· notes: ${esc(j.job.notes.length>60?j.job.notes.slice(0,60)+"…":j.job.notes)}</span>`:""}<span class="right">${st==="created"&&!running?cmdHtml(j.dir):""}</span>`;
   const auditNote=have.has("audit.md")?(j.audit_pass===false?" ✗":""):"";
   const busy=running||st==="error"||st==="created";
   const tabHtml=([f,l])=>`<div class="tab ${f===currentTab?"on":""} ${have.has(f)||busy?"":"off"}" data-tab="${f}">${l}${f==="lecture.mp4"&&j.chapters?`<span class="n">${fmt(j.chapters.duration)}</span>`:""}${f==="audit.md"?auditNote:""}</div>`;
@@ -839,13 +764,12 @@ function buildSettings(j){
     <div class="field"><label>Language</label><select id="sLang">${opt([["en","English"],["de","Deutsch"]],j.job.output_lang)}</select></div>
     <div class="field"><label>Research</label><select id="sScope">${opt([["both","trusted → open"],["trusted","trusted only"],["open","open web"],["none","none"]],j.job.research_scope)}</select></div>
     <div class="field"><label>Video</label><select id="sVideo">${opt([["1","on"],["0","off"]],j.job.video?"1":"0")}</select></div>
-    <div class="field"><label>Voice</label><select id="sTts">${opt(hosted?[["elevenlabs","ElevenLabs"]]:[["elevenlabs","ElevenLabs"],["say","macOS say"]],j.job.tts||(hosted?"elevenlabs":"say"))}</select></div>
+    <div class="field"><label>Voice</label><select id="sTts">${opt([["elevenlabs","ElevenLabs"],["say","macOS say"]],j.job.tts||"say")}</select></div>
     <div class="field"><label>Look <span style="color:var(--faint);font-weight:400">· Redo → Refresh the video applies it</span></label><select id="sTheme">${opt(THEME_OPTS.some(([v])=>v===(j.job.theme||"mix"))?THEME_OPTS:[[j.job.theme,j.job.theme+" (older look, renders as Mix)"],...THEME_OPTS],j.job.theme||"mix")}</select></div>
     <div class="field"><label>Model</label><select id="sModel">${opt([["sonnet","Sonnet 5.5 — fast"],["opus","Opus 5.5 — best quality"],["default","CLI default"]],j.job.model||"sonnet")}</select></div>
     <div class="field" style="flex-basis:100%"><label>Instructions <span style="color:var(--faint)">· read first when the lecture is made</span></label><textarea id="sNotes" rows="2" placeholder="e.g. only chapters 3 and 4 · focus on the exercises · skip the appendix">${esc(j.job.notes||"")}</textarea></div>
     <button class="cta sm" id="sSave">Save</button>
     <div class="note">After changing compression, output, language or instructions use <b>Redo → Rewrite text</b>; turning video on needs <b>Remake video</b>. Stored in <span style="font-family:var(--mono)">jobs/${esc(j.dir)}</span>.</div>`;
-  if(hosted&&!narrationOK){ const o=$("#sVideo").querySelector('option[value="1"]'); o.disabled=true; o.textContent="on — narration is not set up yet, ask the admin"; }
   $("#sSave").onclick=async()=>{
     const r=await post("/api/job/update",{dir:j.dir,title:$("#sTitle").value,ratio:$("#sRatio").value,output:$("#sOut").value,output_lang:$("#sLang").value,research_scope:$("#sScope").value,video:$("#sVideo").value==="1",tts:$("#sTts").value,theme:$("#sTheme").value,model:$("#sModel").value,notes:$("#sNotes").value});
     if(r.error){alert(r.error);return;}
@@ -1020,127 +944,8 @@ document.addEventListener("keydown",e=>{
   else if(e.key===" "||e.key==="k"||e.key==="K"){ v.paused?v.play():v.pause(); take(); }
   else if((e.key==="c"||e.key==="C")&&window.__toggleCC){ window.__toggleCC(); take(); }
 },true);
-
-/* ---------- hosted mode: sign-in card, sidebar account lines, Settings → Your account / People ---------- */
-const isAdmin=()=>!!(me&&me.user&&me.user.admin);
-const usd=n=>"$"+(Math.round((+n||0)*100)/100).toFixed(2);
-const usdBudget=n=>{ n=Math.round((+n||0)*100)/100; return "$"+(Number.isInteger(n)?n:n.toFixed(2)); };
-function applyMode(){
-  $("#sbMe").hidden=!hosted; $("#secUpdates").hidden=hosted; $("#secNarration").hidden=hosted&&!isAdmin();
-  $("#secPeople").hidden=!(hosted&&isAdmin()); $("#secAccount").hidden=!hosted;
-  if(hosted){ $("#narrWhere").textContent="The key is stored on the server. Without it, no videos can be made.";
-    $("#aboutNote").textContent="Lecture Tool runs on a shared server. Your lectures are kept there in your own space."; }
-}
-function paintFooter(){ if(!hosted||!me||!me.user) return; const u=me.usage||{};
-  $("#meName").textContent=me.user.name||me.user.email||""; $("#meName").title=me.user.email||"";
-  const over=u.budget_usd!=null&&(+u.claude_usd||0)>=+u.budget_usd;
-  $("#meUsage").textContent=`Your usage this month: ${usd(u.claude_usd)} of ${usdBudget(u.budget_usd)}`;
-  $("#meUsage").classList.toggle("over",over); $("#meUsage").title=over?"Your monthly budget is used up — ask the admin for more":""; }
-async function refreshMe(){ if(!hosted) return; let m=null; try{ m=await api("/api/me"); }catch(e){} if(!m) return;
-  if(m.hosted&&!m.signed_in){ showAuth(); return; } me=m; paintFooter(); }
-async function loadNarrationState(){ if(!hosted) return; let s=null; try{ s=await api("/api/settings"); }catch(e){} narrationOK=!!(s&&s.elevenlabs&&s.elevenlabs.has_key); }
-
-let authMode="signin";
-const authErr=t=>{ const e=$("#authErr"); e.textContent=t||""; e.hidden=!t; };
-function setAuthMode(mode){ authMode=mode; const up=mode==="signup";
-  $("#authTitle").textContent=up?"Create an account":"Sign in";
-  $("#authNote").textContent=up?"You need an invite code from the person who runs this Lecture Tool.":"Sign in to get to your lectures.";
-  $("#afName").hidden=!up; $("#afInvite").hidden=!up; $("#authGo").textContent=up?"Create account":"Sign in";
-  $("#authSwitch").textContent=up?"I already have an account":"Create an account";
-  $("#aPw").setAttribute("autocomplete",up?"new-password":"current-password"); authErr(""); }
-function showAuth(mode,msg){
-  hosted=true; authGate=true; applyMode(); const m=$("#authModal");
-  if(m.hidden){ m.hidden=false; setAuthMode(mode||"signin"); $("#settingsModal").hidden=true;
-    const d=$("#dock"); if(!d.hidden){ const v=d.querySelector("video"); if(v){ v.pause(); v.remove(); } d.hidden=true; } }
-  if(msg) authErr(msg);
-  setTimeout(()=>{ if(!m.contains(document.activeElement)){ const f=$(authMode==="signup"?"#aName":"#aEmail"); if(f) f.focus(); } },0); }
-$("#authSwitch").onclick=()=>{ setAuthMode(authMode==="signup"?"signin":"signup"); $(authMode==="signup"?"#aName":"#aEmail").focus(); };
-$("#authForm").onsubmit=async e=>{
-  e.preventDefault(); const email=$("#aEmail").value.trim(), pw=$("#aPw").value, up=authMode==="signup";
-  if(!email||!pw){ authErr("Enter your e-mail and password."); return; }
-  let body={email,password:pw};
-  if(up){ const name=$("#aName").value.trim(), invite=$("#aInvite").value.trim();
-    if(!name){ authErr("Enter your name."); return; }
-    if(pw.length<8){ authErr("The password needs at least 8 characters."); return; }
-    body={email,password:pw,name,invite}; }
-  const go=$("#authGo"); go.disabled=true; authErr("");
-  let r; try{ r=await post(up?"/api/auth/signup":"/api/auth/signin",body); }catch(err){ r={error:"The server did not answer. Try again in a moment."}; }
-  go.disabled=false;
-  if(!r||r.error){ authErr((r&&r.error)||"Something went wrong. Try again."); return; }   // the server's words, as they are
-  $("#aPw").value=""; await signedIn(); };
-async function signedIn(){
-  let m=null; try{ m=await api("/api/me"); }catch(e){}
-  if(!m||!m.signed_in){ authErr("Signed in, but the browser did not keep the session — are cookies allowed for this site?"); return; }
-  me=m; authGate=false; $("#authModal").hidden=true; applyMode(); paintFooter(); await loadNarrationState();
-  prevStage={}; $("#history").dataset.sig=""; runNote=null;
-  if(!started) start(); else showComposer(); }
-$("#signOut").onclick=async()=>{
-  try{ await post("/api/auth/signout",{}); }catch(e){}
-  me=null; current=null; jobs=[]; prevStage={}; runNote=null; parkVideo();
-  $("#history").innerHTML=""; $("#history").dataset.sig=""; $("#count").textContent=""; $("#stage").innerHTML=""; $("#stage").dataset.dir="";
-  $("#aEmail").value=""; $("#aPw").value=""; showAuth("signin"); };
-
-function paintAccount(){ if(!hosted||!me||!me.user) return; const u=me.usage||{};
-  $("#accLine").textContent=`Signed in as ${me.user.name||""} (${me.user.email||""}). Your usage this month: ${usd(u.claude_usd)} of ${usdBudget(u.budget_usd)}.`; }
-$("#pwToggle").onclick=()=>{ const f=$("#pwForm"); f.hidden=!f.hidden; $("#pwMsg").textContent=""; if(!f.hidden) $("#pwOld").focus(); };
-$("#pwForm").onsubmit=async e=>{ e.preventDefault(); const o=$("#pwOld").value, n=$("#pwNew").value, msg=$("#pwMsg");
-  if(!o||!n){ msg.textContent="Fill in both fields."; return; }
-  if(n.length<8){ msg.textContent="The new password needs at least 8 characters."; return; }
-  msg.textContent="saving…"; let r; try{ r=await post("/api/auth/password",{old:o,new:n}); }catch(err){ r={error:err.signin?"":"The server did not answer."}; }
-  if(r.error){ msg.textContent=r.error; return; } $("#pwOld").value=""; $("#pwNew").value=""; msg.textContent="Password changed."; };
-
-async function loadPeople(){
-  const box=$("#peopleBox"); if(!box.innerHTML) box.innerHTML='<p class="dnote">Loading…</p>';
-  const grab=p=>api(p).catch(e=>({error:e.signin?"":"The server did not answer."}));
-  const [ur,ir]=await Promise.all([grab("/api/admin/users"),grab("/api/admin/invites")]);
-  if(ur.error||ir.error){ box.innerHTML=`<p class="dnote" style="color:var(--err)">${esc(ur.error||ir.error)}</p>`; return; }
-  const users=Array.isArray(ur)?ur:(ur.users||[]), invites=Array.isArray(ir)?ir:(ir.invites||[]);
-  const spent=u=>+((u.usage||u).claude_usd||0);
-  const open=invites.filter(i=>!i.used_by), used=invites.filter(i=>i.used_by).length;
-  const myId=me&&me.user?me.user.id:"";
-  box.innerHTML=`
-    <h4>Invites</h4>
-    <p class="dnote">Each link lets one person create an account. Send it by message or e-mail.</p>
-    <div class="drow" style="margin-bottom:6px"><div class="field" style="flex:1;min-width:200px"><label>Who is it for <span style="color:var(--faint)">· a note for you</span></label><input id="invNote" placeholder="e.g. Anna, physics" autocomplete="off"></div><button class="ghost" type="button" id="invMake">Create invite</button></div>
-    <div class="invites">${open.map(i=>`<div class="inv"><span class="code">${esc(i.code)}</span><span class="note">${esc(i.note||"")}</span><button class="ghost" type="button" data-copy="${esc(i.code)}">Copy link</button><button class="ghost danger" type="button" data-delinv="${esc(i.code)}">Delete</button></div>`).join("")||'<p class="dnote">No open invites.</p>'}</div>
-    ${used?`<p class="dnote" style="margin-top:6px">${used} invite${used>1?"s":""} already used.</p>`:""}
-    <h4 style="margin-top:18px">People</h4>
-    <div class="tscroll"><table class="people"><thead><tr><th>Name</th><th>E-mail</th><th>This month</th><th>Budget per month</th><th>Disabled</th><th>Admin</th></tr></thead><tbody>
-    ${users.map(u=>`<tr data-id="${esc(u.id)}"><td>${esc(u.name||"")}</td><td class="em">${esc(u.email||"")}</td><td>${usd(spent(u))}</td><td>$ <input type="number" min="0" step="1" value="${esc(u.budget_usd??"")}" data-budget></td><td><input type="checkbox" data-disabled ${u.disabled?"checked":""} ${u.id===myId?"disabled":""}></td><td><input type="checkbox" data-admin ${u.admin?"checked":""} ${u.id===myId?"disabled":""}></td></tr>`).join("")||'<tr><td colspan="6" style="color:var(--faint)">nobody yet</td></tr>'}
-    </tbody></table></div>
-    <div class="dnote" id="peopleMsg" style="margin:6px 0 0;min-height:18px"></div>`;
-  const msg=$("#peopleMsg"), link=c=>`${location.origin}/?invite=${encodeURIComponent(c)}`;
-  const noAnswer=e=>({error:e&&e.signin?"":"The server did not answer."});
-  $("#invMake").onclick=async()=>{ const b=$("#invMake"); b.disabled=true;
-    const r=await post("/api/admin/invites",{note:$("#invNote").value.trim()}).catch(noAnswer); b.disabled=false;
-    if(r.error){ msg.textContent=r.error; return; } await loadPeople(); $("#peopleMsg").textContent="Invite created — copy the link and send it."; };
-  box.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{ const l=link(b.dataset.copy), done=()=>{ b.textContent="Link copied"; setTimeout(()=>b.textContent="Copy link",1500); };
-    // when the clipboard is not allowed, the link is shown in the row instead, already selected, so it can be copied by hand
-    const byHand=()=>{ let i=b.parentNode.querySelector(".linkout"); if(!i){ i=document.createElement("input"); i.className="linkout"; i.readOnly=true; i.value=l; b.parentNode.insertBefore(i,b); } i.focus(); i.select(); let ok=false; try{ ok=document.execCommand("copy"); }catch(e){} if(ok) done(); };
-    (navigator.clipboard?navigator.clipboard.writeText(l):Promise.reject()).then(done,byHand); });
-  box.querySelectorAll("[data-delinv]").forEach(b=>b.onclick=async()=>{
-    const r=await fetch(`/api/admin/invites?code=${encodeURIComponent(b.dataset.delinv)}`,{method:"DELETE"}).then(x=>{ if(x.status===401) showAuth(); return x.json(); }).catch(noAnswer);
-    if(r.error){ msg.textContent=r.error; return; } loadPeople(); });
-  const edit=async(tr,patch)=>{ msg.textContent="saving…";
-    const r=await post("/api/admin/users",Object.assign({id:tr.dataset.id},patch)).catch(noAnswer);
-    if(r.error){ msg.textContent=r.error; loadPeople(); return; } msg.textContent="Saved."; if(tr.dataset.id===myId) refreshMe(); };
-  box.querySelectorAll("[data-budget]").forEach(i=>i.onchange=()=>edit(i.closest("tr"),{budget_usd:Math.max(0,+i.value||0)}));
-  box.querySelectorAll("[data-disabled]").forEach(i=>i.onchange=()=>edit(i.closest("tr"),{disabled:i.checked}));
-  box.querySelectorAll("[data-admin]").forEach(i=>i.onchange=()=>edit(i.closest("tr"),{admin:i.checked}));
-}
-
-/* ---------- boot ---------- */
-function start(){ if(started) return; started=true; showComposer();
-  (function poll(){ setTimeout(async()=>{ if(!authGate){ try{ await refreshJobs(); if(current) await renderJob(); }catch(e){} } poll(); }, offline?8000:3000); })(); }
-async function boot(){
-  let m=null; try{ const r=await fetch("/api/me",{cache:"no-store"}); if(r.ok) m=await r.json(); }catch(e){}
-  if(!(m&&m.hosted)){ start(); return; }                                   // local mode: the panel as it always was
-  hosted=true; const inv=new URLSearchParams(location.search).get("invite");
-  if(inv) history.replaceState(null,"",location.pathname);
-  if(!m.signed_in){ showAuth(inv?"signup":"signin"); if(inv) $("#aInvite").value=inv; return; }
-  me=m; applyMode(); paintFooter(); await loadNarrationState(); start();
-}
-boot();
+showComposer();
+(function poll(){ setTimeout(async()=>{ try{ await refreshJobs(); if(current) await renderJob(); }catch(e){} poll(); }, offline?8000:3000); })();
 </script>
 </body>
 </html>

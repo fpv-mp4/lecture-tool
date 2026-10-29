@@ -8,8 +8,7 @@
     python scripts/render.py <job_dir> --estimate   ElevenLabs credits needed vs. remaining, then exit
 
 Needs: Pillow, ffmpeg/ffprobe on PATH, macOS `say` (or ELEVENLABS_API_KEY in the
-environment / <project>/.env when job.tts == "elevenlabs"). If the chosen voice is not
-available (no key, or `say` on Linux) the render stops with "Narration is not set up". Slides are drawn with
+environment / <project>/.env when job.tts == "elevenlabs"). Slides are drawn with
 Pillow in the SPRTK look using the fonts in ui/fonts.
 
 Scenes are rendered by RENDER_WORKERS threads (default 3) — narration, slide drawing and the
@@ -56,7 +55,6 @@ import json
 import math
 import os
 import re
-import shutil
 import subprocess
 import sys
 import threading
@@ -152,24 +150,6 @@ def load_env():
         os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
 
 
-NARRATION_ERR = "Narration is not set up: add an ElevenLabs key in Settings"
-
-
-def check_narration(tts_mode: str) -> str:
-    """Return the voice that will actually be used, or stop before any work when none can run
-    here. On a Mac without an ElevenLabs key the macOS `say` voice steps in as before (and the
-    log says so); on a server (Linux, no `say`) a missing key is an error, never a silent fallback."""
-    load_env()
-    if tts_mode == "elevenlabs" and not os.environ.get("ELEVENLABS_API_KEY"):
-        if shutil.which("say"):
-            print("no ElevenLabs key — using the macOS voice", flush=True)
-            return "say"
-        raise RuntimeError(NARRATION_ERR)
-    if tts_mode != "elevenlabs" and not shutil.which("say"):
-        raise RuntimeError(NARRATION_ERR + " (the macOS voice is not available on this machine)")
-    return tts_mode
-
-
 _LOG_LOCK = threading.Lock()
 
 
@@ -199,18 +179,10 @@ def font(name: str, size: int) -> ImageFont.FreeTypeFont:
 # Glyph fallback: the brand fonts lack Greek, ≤ ∧ ← etc. Characters a font cannot draw are
 # rendered from the first fallback that has them (Inter first: same sans style and proper
 # Greek; STIX Two Math for the rest), at the same size and on the same baseline.
-# Only the paths that exist on this machine are used: the Mac ones first, then the Linux ones
-# (Debian packages fonts-dejavu-core and fonts-noto-core, as installed in the Docker image).
-_LINUX_FONTS = ["/usr/share/fonts/truetype/noto/NotoSansMath-Regular.ttf",
-                "/usr/share/fonts/truetype/noto/NotoSansSymbols2-Regular.ttf",
-                "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf",
-                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"]
 _FALLBACK = {"mono": ["/System/Library/Fonts/Menlo.ttc", "/System/Library/Fonts/Supplemental/STIXTwoMath.otf",
-                      "/System/Library/Fonts/Apple Symbols.ttf", "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
-                      "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", *_LINUX_FONTS],
+                      "/System/Library/Fonts/Apple Symbols.ttf", "/System/Library/Fonts/Supplemental/Arial Unicode.ttf"],
              "text": [str(FONTS / "inter-500.woff2"), "/System/Library/Fonts/Supplemental/STIXTwoMath.otf",
-                      "/System/Library/Fonts/Apple Symbols.ttf", "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
-                      *_LINUX_FONTS]}
+                      "/System/Library/Fonts/Apple Symbols.ttf", "/System/Library/Fonts/Supplemental/Arial Unicode.ttf"]}
 # What the brand woff2 fonts are assumed to cover when their cmap cannot be read (fontTools needs
 # the `brotli` module for woff2): Latin incl. extensions and general punctuation — everything else
 # goes to the fallback chain. Better a Greek letter from STIX than a box.
@@ -1033,7 +1005,10 @@ def tts(job: Path, sc: dict, s: dict, out: Path, silent: bool):
              "-c:a", "aac", str(out)])
         return duration_of(out), None
     tts_mode = json.loads((job / "job.json").read_text()).get("tts", "say")
-    tts_mode = check_narration(tts_mode)
+    load_env()
+    if tts_mode == "elevenlabs" and not os.environ.get("ELEVENLABS_API_KEY"):
+        log(job, "ELEVENLABS_API_KEY not set (environment or .env) — falling back to macOS say")
+        tts_mode = "say"
     key = audio_key(sc, s, tts_mode)
     if cached(sdir, key):
         al = sdir / "alignment.json"
@@ -1310,8 +1285,6 @@ def main():
     scenes = sc["scenes"]
     total = len(scenes)
     tts_mode = json.loads((job / "job.json").read_text()).get("tts", "say")
-    if not silent:
-        tts_mode = check_narration(tts_mode)
     msg = ""
     if tts_mode == "elevenlabs" and not silent and only is None:
         chars, credits, model = el_estimate(job, sc, workdir)
